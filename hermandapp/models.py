@@ -8,6 +8,7 @@ class Titular(models.Model):
     anyo= models.IntegerField()
     procesiona = models.BooleanField(default=True)
     imagen = models.CharField(max_length=1000)
+    autor= models.CharField(max_length=250)
 
     def __str__(self):
         return self.nombre
