@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <h1>Titulares de la hermandad</h1>
+
+    {% for titular in titulares %}
+        <div class="card custom-card">
+            <div class="row g-0">  <!-- Contenedor flexible con Bootstrap -->
+                <div class="col-md-4">  <!-- Columna izquierda (imagen) -->
+                    <img src="{{ titular.imagen }}" class="custom-img" alt="{{ titular.nombre }}">
+                </div>
+                <div class="col-md-8">  <!-- Columna derecha (texto) -->
+                    <div class="card-body custom-body">
+                        <h5 class="custom-header">{{ titular.nombre }}</h5>
+                        <p class="card-text"><strong>Año de creación:</strong> {{ titular.anyo }}</p>
+                        <p class="card-text">{{ titular.descripcion }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+
+    <br>
+
+    <a href="{% url 'generar_titular' %}">
+        <button type="button" class="btn-amargura">
+            Generar Titular
+        </button>
+    </a>
+
+
+{% endblock %}

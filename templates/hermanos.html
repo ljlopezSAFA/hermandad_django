@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <h1>Listado de Hermanos</h1>
+
+
+
+    {% for h in hermanos %}
+            <h1>{{ h.nombre }} ,{{ h.apellidos }}</h1>
+            <h2>{{ h.dni }}</h2>
+    {% endfor %}
+
+
+
+
+
+{% endblock %}
