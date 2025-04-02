@@ -8,6 +8,10 @@ urlpatterns = [
     path('aboutus/', go_about_us, name='about_us'),
     path('titulares/', go_titulares, name='titulares'),
     path('crear_titular/', crear_titular_default, name='generar_titular'),
-    path('templo/', go_templo_page , name='templo'),
+    path('templo/', go_templo_page, name='templo'),
     path('hermanos/', cargar_listado_hermanos, name='hermanos'),
+    path('hermanos/<int:id>', crear_editar, name='hermanos_gestion'),
+    path('hermanos/delete/<int:id>', eliminar_hermano, name='eliminar_hermano'),
+    path('composiciones_musicales/', go_composiciones, name='composiciones'),
+    path('composiciones_musicales/new', new_composicion, name='new_composicion'),
 ]

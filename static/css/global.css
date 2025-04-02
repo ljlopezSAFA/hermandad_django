@@ -56,8 +56,6 @@ h1 {
 }
 
 
-
-
 /* Card personalizada */
 .custom-card {
     background: #f8f9fa; /* Gris claro */
@@ -98,11 +96,39 @@ h1 {
     border-bottom-left-radius: 12px;
 }
 
+.avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* Recorta la imagen sin distorsionarla */
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    border: 2px solid black; /* Opcional: agrega un borde */
+}
+
+th {
+    text-align: center; /* Centra horizontalmente el texto */
+    vertical-align: middle; /* Centra verticalmente en la celda */
+}
+
+form label {
+    color: darkred;
+}
+
+.form-control {
+    background-color: white !important; /* Cambia este color según tu preferencia */
+    border: 1px solid darkred; /* Mantiene el borde de Bootstrap */
+    color: darkred; /* Mantiene el color del texto */
+}
+
+input[type="date"] {
+    color: darkred;
+}
+
 
 @media (max-width: 768px) {
     .custom-card .row {
         flex-direction: column;
     }
+
     .custom-img {
         border-radius: 12px 12px 0 0;
     }

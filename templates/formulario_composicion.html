@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="inputNombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="inputNombre"
+                   name="nombre" placeholder="nombre">
+        </div>
+        <div class="mb-3">
+            <label for="inputAutor" class="form-label">Autor</label>
+            <input type="text"
+                   name="autor"
+                   class="form-control" id="inputAutor" placeholder="autor">
+        </div>
+        <div class="mb-3">
+            <label for="inputFecha" class="form-label">Fecha</label>
+            <input type="date"
+                   name="fecha"
+                   class="form-control" id="inputFecha" placeholder="fecha composición">
+        </div>
+        <div class="mb-3">
+            <input name="marcha"
+                    class="form-check-input" type="checkbox" value="" id="inputMarcha">
+            <label class="form-check-label" for="inputMarcha">
+                Es Marcha Procesional
+            </label>
+        </div>
+
+        <button type="submit" class="btn-amargura">Guardar</button>
+
+
+    </form>
+
+
+
+{% endblock %}

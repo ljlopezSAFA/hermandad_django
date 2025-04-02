@@ -8,7 +8,7 @@ class Titular(models.Model):
     anyo= models.IntegerField()
     procesiona = models.BooleanField(default=True)
     imagen = models.CharField(max_length=1000)
-    autor= models.CharField(max_length=250)
+    autor= models.CharField(max_length=250, default='')
 
     def __str__(self):
         return self.nombre
@@ -25,21 +25,15 @@ class Hermano(models.Model):
         return self.nombre
 
 
+class ComposicionMusical(models.Model):
+    nombre = models.CharField(max_length=200)
+    autor = models.CharField(max_length=150)
+    fecha_creacion = models.DateField()
+    es_marcha_procesional = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
 
 
-
-
-
-
-# class Titular(models.Model):
-#     nombre = models.CharField(max_length=250)
-#     descripcion = models.TextField()
-#     autor = models.CharField(max_length=250)
-#     anyo = models.IntegerField()
-#     imagen = models.CharField(max_length=1000)
-#     procesiona = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.nombre
 
 
