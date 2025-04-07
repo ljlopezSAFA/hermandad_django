@@ -33,19 +33,22 @@ def go_composiciones(request):
     return render(request, 'composiciones.html', {'composiciones': lista_composiciones})
 
 
-def new_composicion(request):
+def new_composicion(request, id):
+
+    composicion = ComposicionMusical.objects.filter(id=id)
+
+    if len(composicion) == 0:
+        composicion_nueva = ComposicionMusical()
+    else:
+        composicion_nueva = composicion[0]
+
+
 
     if request.method == 'POST':
         #RECOGER LOS DATOS
-        nombre = request.POST.get("nombre", "")
-        autor = request.POST.get("autor", "")
-        fecha = request.POST.get("fecha", "")
-        marcha = request.POST.get("marcha", False)
-
-        composicion_nueva = ComposicionMusical()
-        composicion_nueva.nombre = nombre
-        composicion_nueva.autor = autor
-        composicion_nueva.fecha_creacion = fecha
+        composicion_nueva.nombre = request.POST['nombre']
+        composicion_nueva.autor = request.POST['autor_de_composicion']
+        composicion_nueva.fecha_creacion = request.POST['fecha']
         composicion_nueva.es_marcha_procesional= True
 
         #GUARDAR EN BASE DE DATOS
@@ -57,7 +60,21 @@ def new_composicion(request):
 
 
     else:
-        return render(request, 'formulario_composicion.html')
+        return render(request, 'formulario_composicion.html', {'composicion': composicion_nueva})
+
+
+
+
+def eliminar_composicion(request, id):
+    composicion_eleminar = ComposicionMusical.objects.filter(id=id)
+
+    if len(composicion_eleminar) != 0:
+        composicion_eleminar[0].delete()
+
+    return redirect('composiciones')
+
+
+
 
 
 

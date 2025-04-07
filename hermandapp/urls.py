@@ -13,5 +13,6 @@ urlpatterns = [
     path('hermanos/<int:id>', crear_editar, name='hermanos_gestion'),
     path('hermanos/delete/<int:id>', eliminar_hermano, name='eliminar_hermano'),
     path('composiciones_musicales/', go_composiciones, name='composiciones'),
-    path('composiciones_musicales/new', new_composicion, name='new_composicion'),
+    path('composiciones_musicales/new/<int:id>', new_composicion, name='new_composicion'),
+    path('composiciones_musicales/eliminar/<int:id>', eliminar_composicion, name='eliminar'),
 ]
