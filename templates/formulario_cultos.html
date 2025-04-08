@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+
+<h1>Datos del Culto</h1>
+<br>
+
+<div class="row">
+    <!-- Imagen decorativa -->
+    <div class="col-md-5">
+        <img src="https://static.grupojoly.com/clip/82abc80a-d6d2-411f-b7f2-efbc759edebb_source-aspect-ratio_1600w_0.jpg"
+             style="width: 100%; height: 100%; object-fit: cover"
+             alt="Imagen del Culto">
+    </div>
+
+    <!-- Formulario -->
+    <div class="col-md-7">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="nombre"
+                       name="nombre" placeholder="Nombre del culto"
+                       value="{{ form.nombre.value|default:'' }}">
+                <label for="nombre">{% bs_icon 'bookmark-star' %} Nombre</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea class="form-control" id="descripcion" name="descripcion"
+                          placeholder="Descripción del culto" style="height: 100px">{{ form.descripcion.value|default:'' }}</textarea>
+                <label for="descripcion">{% bs_icon 'text-left' %} Descripción</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="datetime-local" class="form-control" id="fecha_inicio"
+                       name="fecha_inicio" value="{{ form.fecha_inicio.value|default:'' }}">
+                <label for="fecha_inicio">{% bs_icon 'calendar2-week' %} Fecha de inicio</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="datetime-local" class="form-control" id="fecha_fin"
+                       name="fecha_fin" value="{{ form.fecha_fin.value|default:'' }}">
+                <label for="fecha_fin">{% bs_icon 'calendar2-week-fill' %} Fecha de fin</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select class="form-select" id="titular" name="titular">
+                    {% for titular in form.fields.titular.queryset %}
+                        <option value="{{ titular.id }}"
+                            {% if titular.id|stringformat:"s" == form.titular.value|stringformat:"s" %}selected{% endif %}>
+                            {{ titular.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="titular">{% bs_icon 'people' %} Titular</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <select class="form-select" id="tipo" name="tipo">
+                    {% for key, label in form.fields.tipo.choices %}
+                        <option value="{{ key }}"
+                            {% if key == form.tipo.value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="tipo">{% bs_icon 'clipboard-check' %} Tipo de culto</label>
+            </div>
+
+            <button type="submit" class="btn-amargura">Guardar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

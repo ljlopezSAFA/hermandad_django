@@ -67,6 +67,18 @@ h1 {
     margin: 0 auto;
 }
 
+.composicion-card {
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    margin-bottom: 20px;
+}
+
 /* Personalización del Header */
 .custom-header {
     text-align: center;
@@ -123,6 +135,32 @@ input[type="date"] {
     color: darkred;
 }
 
+.centrar {
+    display: flex;
+    justify-content: center; /* horizontal */
+    align-items: center; /* vertical */
+}
+
+.alinear-final {
+    display: flex;
+    justify-content: right; /* horizontal */
+    align-items: center; /* vertical */
+}
+
+.card .row {
+    height: 100%;
+}
+
+.card .col-md-4 img {
+    height: 100%;
+    object-fit: cover; /* o 'contain' si quieres ver toda la imagen */
+}
+
+.cubrir-contenedor {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 @media (max-width: 768px) {
     .custom-card .row {

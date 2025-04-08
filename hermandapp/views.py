@@ -20,6 +20,11 @@ def cargar_listado_hermanos(request):
     return render(request, 'hermanos.html', {'hermanos': lista_hermanos})
 
 
+def cargar_cultos(request):
+    cultos = Culto.objects.all()
+    return render(request, 'cultos.html', {'cultos': cultos})
+
+
 def formulario_hermano(request):
     return render(request, 'formulario_hermanos.html')
 
@@ -28,13 +33,13 @@ def go_titulares(request):
     list_titulares = Titular.objects.all()
     return render(request, 'titulares.html', {'titulares': list_titulares})
 
+
 def go_composiciones(request):
     lista_composiciones = ComposicionMusical.objects.all()
     return render(request, 'composiciones.html', {'composiciones': lista_composiciones})
 
 
 def new_composicion(request, id):
-
     composicion = ComposicionMusical.objects.filter(id=id)
 
     if len(composicion) == 0:
@@ -42,27 +47,22 @@ def new_composicion(request, id):
     else:
         composicion_nueva = composicion[0]
 
-
-
     if request.method == 'POST':
-        #RECOGER LOS DATOS
+        # RECOGER LOS DATOS
         composicion_nueva.nombre = request.POST['nombre']
         composicion_nueva.autor = request.POST['autor_de_composicion']
         composicion_nueva.fecha_creacion = request.POST['fecha']
-        composicion_nueva.es_marcha_procesional= True
+        composicion_nueva.es_marcha_procesional = True
 
-        #GUARDAR EN BASE DE DATOS
+        # GUARDAR EN BASE DE DATOS
         composicion_nueva.save()
 
-
-        #REDIRIGIR AL USUARIO A LA Página de listar
+        # REDIRIGIR AL USUARIO A LA Página de listar
         return redirect('composiciones')
 
 
     else:
         return render(request, 'formulario_composicion.html', {'composicion': composicion_nueva})
-
-
 
 
 def eliminar_composicion(request, id):
@@ -72,17 +72,6 @@ def eliminar_composicion(request, id):
         composicion_eleminar[0].delete()
 
     return redirect('composiciones')
-
-
-
-
-
-
-
-
-
-
-
 
 
 def crear_editar(request, id):
@@ -104,10 +93,7 @@ def crear_editar(request, id):
     return render(request, 'formulario_hermanos.html', {'form': form})
 
 
-
-
-def eliminar_hermano(request,id):
-
+def eliminar_hermano(request, id):
     hermano = get_object_or_404(Hermano, id=id)  # Si existe, lo obtenemos
 
     if hermano:
@@ -117,19 +103,35 @@ def eliminar_hermano(request,id):
 
 
 
+# Crear culto
+def crear_culto(request):
+    if request.method == 'POST':
+        form = CultoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cultos')  # Asegúrate de tener esta URL configurada
+    else:
+        form = CultoForm()
+
+    return render(request, 'formulario_cultos.html', {'form': form})
+
+
+# Editar culto
+def editar_culto(request, culto_id):
+    culto = get_object_or_404(Culto, id=culto_id)
+
+    if request.method == 'POST':
+        form = CultoForm(request.POST, instance=culto)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_cultos')
+    else:
+        form = CultoForm(instance=culto)
+
+    return render(request, 'formulario_cultos.html', {'form': form})
 
 
 
-# def crear_hermano(request):
-#     if request.method == "POST":
-#         form = HermanoForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('hermanos')  # Cambia por la URL correcta
-#     else:
-#         form = HermanoForm()
-#
-#     return render(request, 'formulario_hermanos.html', {'form': form})
 
 
 def crear_titular_default(request):
@@ -151,3 +153,5 @@ def crear_titular_default(request):
 
     print("Titular creado->", titular)
     return redirect('titulares')
+
+

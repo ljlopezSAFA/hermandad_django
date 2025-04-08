@@ -3,37 +3,55 @@
 
 {% block content %}
 
-    <form method="post">
+    <h1>Datos de la Composición Musical</h1>
+    <br>
+    <div class="row">
 
-        {% csrf_token %}
-
-        <div class="mb-3">
-            <label for="inputNombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="inputNombre"
-                   name="nombre" placeholder="nombre" value="{{ composicion.nombre | default:'' }}">
+        <div class="col-md-5">
+            <img src="https://bandapamplonesa.com/wp-content/uploads/2021/02/Cartel_14_03_2021-scaled.jpg"
+                 style="max-height: 400px; max-width: 400px"
+                 alt="...">
         </div>
-        <div class="mb-3">
-            <label for="inputAutor" class="form-label">Autor</label>
-            <input type="text"
-                   name="autor_de_composicion"
-                   class="form-control" id="inputAutor" placeholder="autor" value="{{ composicion.autor | default:'' }}">
+        <br>
+
+        <div class="col-md-7">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+
+                <input type="text" class="form-control" id="nombre"
+                       name="nombre" placeholder="Nombre de la composición"
+                       value="{{ composicion.nombre | default:'' }}">
+                <label for="nombre">{% bs_icon 'file-music' %} Nombre</label>
+            </div>
+            <div class="form-floating mb-3">
+
+                <input type="text"
+                       name="autor_de_composicion"
+                       class="form-control"
+                       id="autor"
+                       placeholder="Autor de la composición"
+                       value="{{ composicion.autor | default:'' }}">
+                <label for="autor">{% bs_icon 'person-square' %} Autor</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="date"
+                       name="fecha"
+                       value="{{ composicion.fecha_creacion|date:'Y-m-d' }}"
+                       class="form-control" id="fecha" placeholder="fecha composición">
+                <label for="fecha">{% bs_icon 'calendar' %} Fecha</label>
+            </div>
+
+            <button type="submit" class="btn-amargura">Guardar</button>
+
+
+        </form>
+
         </div>
-        <div class="mb-3">
-            <label for="inputFecha" class="form-label">Fecha</label>
-            <input type="date"
-                   name="fecha"
-                   value="{{ composicion.fecha_creacion|date:'Y-m-d' }}"
-                   class="form-control" id="inputFecha" placeholder="fecha composición">
-        </div>
-
-        <button type="submit" class="btn-amargura">Guardar</button>
-
-
-    </form>
-
-
-{#    value="{{ composicion.nombre|default:'' }}#}
-{#    {{ composicion.fecha_creacion|date:'Y-m-d' }}#}
+    </div>
 
 
 {% endblock %}

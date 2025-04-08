@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <h1>Cultos de la Hermandad</h1>
+
+    <div class="container">
+        <div class="row">
+            {% for culto in cultos %}
+                <div class="col-md-6 mb-4">
+                    <div class="card custom-card h-100">
+                        <div class="card-body custom-body">
+                            <h5 class="custom-header">{{ culto.nombre }}</h5>
+                            <p class="card-text"><strong>Tipo:</strong> {{ culto.get_tipo_display }}</p>
+                            <p class="card-text"><strong>Descripción:</strong> {{ culto.descripcion }}</p>
+                            <p class="card-text"><strong>Inicio:</strong> {{ culto.fecha_inicio|date:"d/m/Y H:i" }}</p>
+                            <p class="card-text"><strong>Fin:</strong> {{ culto.fecha_fin|date:"d/m/Y H:i" }}</p>
+                            <p class="card-text"><strong>Titular:</strong> {{ culto.titular.nombre }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:2 and not forloop.last %}
+                    </div><div class="row">
+                {% endif %}
+            {% empty %}
+                <p>No hay cultos registrados aún.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <br>
+
+    <a href="{% url 'crear_culto' %}">
+        <button type="button" class="btn-amargura">
+            Crear nuevo Culto
+        </button>
+    </a>
+{% endblock %}
