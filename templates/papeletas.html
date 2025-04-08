@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <h1>Listado de Papeletas de Sitio</h1>
+
+
+
+    {% if papeletas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Tipo</th>
+                    <th>Hermano</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for papeleta in papeletas %}
+                    <tr>
+                        <td>{{ papeleta.codigo }}</td>
+                        <td>{{ papeleta.get_tipo_display }}</td>
+                        <td>{{ papeleta.hermano.nombre }} - {{ papeleta.hermano.dni }}</td>
+                        <td>
+
+                            <a href="{% url 'editar_papeleta' papeleta.id %}" >
+                               <button class="btn-amargura" >{% bs_icon 'pen' %}</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay papeletas de sitio registradas.</p>
+    {% endif %}
+
+      <a href="{% url 'crear_papeleta' %}" >
+        <button class="btn-amargura"> Nueva Papeleta de Sitio</button>
+    </a>
+{% endblock %}

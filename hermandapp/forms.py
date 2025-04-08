@@ -14,7 +14,7 @@ class HermanoForm(forms.ModelForm):
             'mail': forms.EmailInput(
                 attrs={'class': 'form-control', 'placeholder': 'Correo electrónico', 'id': 'floatingInput'}),
             'fecha_nacimiento': forms.DateInput(
-                attrs={'class': 'form-control', 'type': 'date', 'id': 'inputfechaNacimiento'}),
+                attrs={'class': 'form-control', 'type': 'date-local', 'id': 'inputfechaNacimiento'}),
         }
 
 

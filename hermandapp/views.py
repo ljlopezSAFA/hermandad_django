@@ -132,6 +132,129 @@ def editar_culto(request, culto_id):
 
 
 
+def listar_papeletas(request):
+    # Obtener todas las papeletas de sitio
+    papeletas = PapeletaSitio.objects.all()
+
+    return render(request, 'papeletas.html', {
+        'papeletas': papeletas
+    })
+
+
+
+def crear_o_editar_papeleta(request, id=None):
+
+    if id:
+        papeleta = PapeletaSitio.objects.get(id=id)
+    else:
+        papeleta = PapeletaSitio()
+
+    if request.method == 'POST':
+        #Recoger datos
+        papeleta.codigo = request.POST['codigo']
+        papeleta.tipo = request.POST['tipo']
+        papeleta.hermano = Hermano.objects.get(id=request.POST['hermano'])
+
+        #Guardar en bbdd la papeleta
+        papeleta.save()
+
+
+        #Redirigir al usuario a la pagina de listado
+        return redirect('papeletas')
+    else:
+        elecciones = TipoPapeleta.choices
+        hermanos = Hermano.objects.all()
+        return render(request, 'formulario_papeletas.html', {'elecciones': elecciones,
+                                                             'hermanos': hermanos,
+                                                             'papeleta': papeleta})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # # Si id está presente, estamos editando una papeleta existente
+    # if id:
+    #     papeleta = get_object_or_404(PapeletaSitio, id=id)
+    # else:
+    #     papeleta = None
+    #
+    # # Obtener todos los hermanos y los tipos de papeletas disponibles
+    # hermanos = Hermano.objects.all()
+    # papeleta_tipo_choices = TipoPapeleta.choices  # Las opciones definidas en el modelo
+    #
+    # if request.method == 'POST':
+    #     # Obtener los datos del formulario
+    #     codigo = request.POST.get('codigo')
+    #     tipo = request.POST.get('tipo')
+    #     hermano_id = request.POST.get('hermano')
+    #
+    #     # Validación básica (si quieres hacerla más compleja, puedes agregar más condiciones)
+    #     if not codigo or not tipo or not hermano_id:
+    #         return render(request, 'formulario_papeletas.html', {
+    #             'papeleta': papeleta,
+    #             'hermanos': hermanos,
+    #             'papeleta_tipo_choices': papeleta_tipo_choices,
+    #             'error': 'Todos los campos son obligatorios.'
+    #         })
+    #
+    #     hermano = Hermano.objects.get(id=hermano_id)
+    #
+    #     # Crear o editar la papeleta
+    #     if papeleta:
+    #         papeleta.codigo = codigo
+    #         papeleta.tipo = tipo
+    #         papeleta.hermano = hermano
+    #         papeleta.save()  # Guardar la papeleta actualizada
+    #     else:
+    #         # Si no estamos editando, creamos una nueva papeleta
+    #         PapeletaSitio.objects.create(codigo=codigo, tipo=tipo, hermano=hermano)
+    #
+    #     return redirect('papeletas')  # Redirigir a una página de listado (puedes cambiar la URL)
+    #
+    # return render(request, 'formulario_papeletas.html', {
+    #     'papeleta': papeleta,
+    #     'hermanos': hermanos,
+    #     'papeleta_tipo_choices': papeleta_tipo_choices
+    # })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def crear_titular_default(request):

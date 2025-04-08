@@ -17,4 +17,7 @@ urlpatterns = [
     path('composiciones_musicales/', go_composiciones, name='composiciones'),
     path('composiciones_musicales/new/<int:id>', new_composicion, name='new_composicion'),
     path('composiciones_musicales/eliminar/<int:id>', eliminar_composicion, name='eliminar'),
+    path('crear_papeleta/', crear_o_editar_papeleta, name='crear_papeleta'),
+    path('editar_papeleta/<int:id>/', crear_o_editar_papeleta, name='editar_papeleta'),
+    path('listar_papeletas/', listar_papeletas, name='papeletas'),
 ]

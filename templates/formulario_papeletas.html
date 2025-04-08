@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <h1>{% if papeleta %}Editar{% else %}Crear{% endif %} Papeleta de Sitio</h1>
+
+    <div class="row">
+        <div class="col-md-5">
+            <img class="cubrir-contenedor"
+                 src="https://static.grupojoly.com/clip/f9d13b75-a786-4f28-a0a4-9aef3f39e1ea_source-aspect-ratio_1600w_0.jpg"
+                 style="max-height: 400px; max-width: 400px" alt="Papeleta de Sitio">
+        </div>
+        <br>
+
+        <div class="col-md-7">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Campo de código -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="codigo" name="codigo"
+                           placeholder="Código de la papeleta"
+                           value="{% if papeleta %}{{ papeleta.codigo }}{% endif %}" required>
+                    <label for="codigo">{% bs_icon 'file-earmark-text' %} Código</label>
+                </div>
+
+
+                <div class="form-floating">
+                    <select class="form-select" id="tipo" name="tipo" aria-label="Selecciona tipo de papeleta">
+                       {% for valor,nombre in elecciones %}
+
+                          <option value="{{ valor }}" {% if papeleta.tipo == valor %}selected{% endif %}>{{ nombre }}</option>
+
+                        {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Selecciona tipo de papeleta</label>
+                </div>
+
+            <br>
+
+             <div class="form-floating">
+                    <select class="form-select" id="hermano" name="hermano" aria-label="Selecciona hermano">
+                       {% for h in hermanos %}
+                           <option value="{{ h.id }}" {% if h.id == papeleta.hermano.id %} selected {% endif %}>
+                               {{ h.nombre }},{{ h.apellidos }}</option>
+
+                        {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Selecciona hermano</label>
+                </div>
+
+
+
+                <!-- Botón de guardar -->
+                <button type="submit" class="btn-amargura">
+                    {% if papeleta %}Actualizar{% else %}Crear{% endif %}
+                </button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

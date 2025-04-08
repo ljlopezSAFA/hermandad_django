@@ -51,8 +51,9 @@ h1 {
 }
 
 .btn-amargura:hover {
-    background-color: black; /* Verde */
+    background-color: floralwhite; /* Verde */
     color: darkred;
+    border: 1pt solid darkred;
 }
 
 
@@ -160,6 +161,8 @@ input[type="date"] {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 15px;  /* Ajusta este valor para más o menos redondeo */
+  border: 3px solid darkred;  /* Ajusta el grosor y color del borde */
 }
 
 @media (max-width: 768px) {
