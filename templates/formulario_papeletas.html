@@ -2,8 +2,8 @@
 {% load bootstrap_icons %}
 
 {% block content %}
-    <h1>{% if papeleta %}Editar{% else %}Crear{% endif %} Papeleta de Sitio</h1>
-
+    <h1>{% if papeleta.id %}Editar{% else %}Crear{% endif %} Papeleta de Sitio</h1>
+    <br>
     <div class="row">
         <div class="col-md-5">
             <img class="cubrir-contenedor"
@@ -13,13 +13,16 @@
         <br>
 
         <div class="col-md-7">
+            <br>
             <form method="post">
                 {% csrf_token %}
+
+
 
                 <!-- Campo de código -->
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="codigo" name="codigo"
-                           placeholder="Código de la papeleta"
+                           placeholder="Código de la papeleta" readonly
                            value="{% if papeleta %}{{ papeleta.codigo }}{% endif %}" required>
                     <label for="codigo">{% bs_icon 'file-earmark-text' %} Código</label>
                 </div>
@@ -27,22 +30,23 @@
 
                 <div class="form-floating">
                     <select class="form-select" id="tipo" name="tipo" aria-label="Selecciona tipo de papeleta">
-                       {% for valor,nombre in elecciones %}
+                        {% for valor,nombre in elecciones %}
 
-                          <option value="{{ valor }}" {% if papeleta.tipo == valor %}selected{% endif %}>{{ nombre }}</option>
+                            <option value="{{ valor }}"
+                                    {% if papeleta.tipo == valor %}selected{% endif %}>{{ nombre }}</option>
 
                         {% endfor %}
                     </select>
                     <label for="floatingSelect">Selecciona tipo de papeleta</label>
                 </div>
 
-            <br>
+                <br>
 
-             <div class="form-floating">
+                <div class="form-floating">
                     <select class="form-select" id="hermano" name="hermano" aria-label="Selecciona hermano">
-                       {% for h in hermanos %}
-                           <option value="{{ h.id }}" {% if h.id == papeleta.hermano.id %} selected {% endif %}>
-                               {{ h.nombre }},{{ h.apellidos }}</option>
+                        {% for h in hermanos %}
+                            <option value="{{ h.id }}" {% if h.id == papeleta.hermano.id %} selected {% endif %}>
+                                {{ h.nombre }},{{ h.apellidos }}</option>
 
                         {% endfor %}
                     </select>
@@ -50,10 +54,10 @@
                 </div>
 
 
-
+                <br>
                 <!-- Botón de guardar -->
                 <button type="submit" class="btn-amargura">
-                    {% if papeleta %}Actualizar{% else %}Crear{% endif %}
+                    {% if papeleta.id %}Actualizar{% else %}Crear{% endif %}
                 </button>
 
             </form>

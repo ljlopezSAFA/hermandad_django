@@ -158,11 +158,25 @@ input[type="date"] {
 }
 
 .cubrir-contenedor {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 15px;  /* Ajusta este valor para más o menos redondeo */
-  border: 3px solid darkred;  /* Ajusta el grosor y color del borde */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px; /* Ajusta este valor para más o menos redondeo */
+    border: 3px solid darkred; /* Ajusta el grosor y color del borde */
+}
+
+
+.errorlist {
+    list-style: none;
+    color: wheat;
+    background-color: darkred;
+    border-radius: 10px;
+
+
+}
+
+.error input, .error select {
+    border: 2px darkred solid;
 }
 
 @media (max-width: 768px) {

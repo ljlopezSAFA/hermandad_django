@@ -1,4 +1,5 @@
 from django import forms
+
 from .models import *
 
 
@@ -52,3 +53,47 @@ class CultoForm(forms.ModelForm):
                 'id': 'inputTipoCulto'
             }),
         }
+
+
+class PapeletaForm(forms.ModelForm):
+    class Meta:
+        model = PapeletaSitio
+        fields = ['codigo', 'tipo', 'hermano']
+
+
+class TitularForm(forms.ModelForm):
+    class Meta:
+        model = Titular
+        fields = ['nombre', 'descripcion', 'anyo', 'procesiona', 'autor', 'imagen']
+        widgets = {
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre del Titular',
+                'id': 'nombre'
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Información del Titular',
+                'id': 'descripcion'
+            }),
+            'anyo': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Catalogado en el año',
+                'id': 'anyo'
+            })
+        }
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+
+        if len(nombre) < 10:
+            self.add_error('nombre', 'El nombre tiene que contener al menos 10 caracteres')
+
+        return nombre
+
+    def clean_anyo(self):
+        anyo = self.cleaned_data.get('anyo')
+        if anyo < 1000:
+            self.add_error('anyo', 'No se puede catalogar una imagen con más de 1000 años de antigüedad')
+
+        return anyo

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+    <h1>Datos del Titular</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ formulario.as_p }}
+        <button type="submit" class="btn-amargura"> Guardar</button>
+    </form>
+
+{% endblock %}

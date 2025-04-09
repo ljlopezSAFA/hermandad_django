@@ -4,39 +4,95 @@
 {% block content %}
     <h1>Listado de Papeletas de Sitio</h1>
 
-
-
     {% if papeletas %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Tipo</th>
-                    <th>Hermano</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="papeletas-container">
+            <div class="row">
                 {% for papeleta in papeletas %}
-                    <tr>
-                        <td>{{ papeleta.codigo }}</td>
-                        <td>{{ papeleta.get_tipo_display }}</td>
-                        <td>{{ papeleta.hermano.nombre }} - {{ papeleta.hermano.dni }}</td>
-                        <td>
+                    <div class="col-md-4">
+                        <div class="papeleta-card">
+                            <div class="marca-agua"></div>
+                            <div class="contenido">
+                                <p>{% bs_icon 'upc' %}<strong>Código:</strong> {{ papeleta.codigo }}</p>
+                                <p>{% bs_icon 'toggle-off' %}<strong>Tipo:</strong> {{ papeleta.get_tipo_display }}</p>
+                                <p>{% bs_icon 'person' %}<strong>Hermano:</strong> {{ papeleta.hermano.nombre }}
+                                    - {{ papeleta.hermano.dni }}</p>
+                                <p>{% bs_icon 'clock' %}<strong>Fecha
+                                    obetención:</strong> {{ papeleta.fecha_obtencion }}</p>
+                                <p>{% bs_icon 'calendar' %}<strong>Año:</strong> {{ papeleta.anyo }}</p>
+                                <div class="acciones">
+                                    <div class="row centrar">
+                                        <div class="col-md-4">
+                                            <a href="{% url 'editar_papeleta' papeleta.id %}">
+                                            <button class="btn-amargura">{% bs_icon 'pen' %}</button>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a href="{% url 'eliminar_papeleta' papeleta.id %}">
+                                            <button class="btn-amargura">{% bs_icon 'trash' %}</button>
+                                            </a>
+                                        </div>
+                                    </div>
 
-                            <a href="{% url 'editar_papeleta' papeleta.id %}" >
-                               <button class="btn-amargura" >{% bs_icon 'pen' %}</button>
-                            </a>
-                        </td>
-                    </tr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
     {% else %}
         <p>No hay papeletas de sitio registradas.</p>
     {% endif %}
 
-      <a href="{% url 'crear_papeleta' %}" >
-        <button class="btn-amargura"> Nueva Papeleta de Sitio</button>
+     <br>
+    <a href="{% url 'crear_papeleta' %}">
+        <button class="btn-amargura">Nueva Papeleta de Sitio</button>
     </a>
+
+    <style>
+
+        .papeletas-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .papeleta-card {
+            position: relative;
+            background: #fdf6e3; /* color papel antiguo */
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1pt solid darkred;
+            overflow: hidden;
+        }
+
+        .marca-agua {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/static/images/marca_agua_papeletas.jpg'); /* asegúrate de que esta ruta sea válida */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* más tenue para que no moleste al texto */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .contenido {
+            position: relative;
+            z-index: 1;
+            text-align: left;
+        }
+
+        .acciones {
+            margin-top: 1rem;
+        }
+    </style>
+
 {% endblock %}

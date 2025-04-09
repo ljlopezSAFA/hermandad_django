@@ -1,4 +1,8 @@
+from datetime import datetime
+from django.utils import timezone
 from django.db import models
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta  # mejor para años
 
 
 class TipoCulto(models.TextChoices):
@@ -10,12 +14,29 @@ class TipoCulto(models.TextChoices):
     FUNCION_PRINCIPAL = 'FUNCION_PRINCIPAL', 'Función Principal'
 
 
-
 class TipoPapeleta(models.TextChoices):
     NAZARENO = 'NAZARENO', 'Nazareno'
     MUSICO = 'MUSICO', 'Músico'
     GENERAL = 'GENERAL' 'General'
 
+class CargoHermandad(models.TextChoices):
+    HERMANO_MAYOR = 'HERMANO_MAYOR', 'Hermano Mayor'
+    TENIENTE_HERMANO_MAYOR = 'TENIENTE_HERMANO_MAYOR', 'Teniente Hno. Mayor'
+    PROMOTORA_SACRAMENTAL = 'PROMOTORA_SACRAMENTAL', 'Promotora Sacramental'
+    CONSILIARIO_PRIMERO = 'CONSILIARIO_PRIMERO', 'Consiliario Primero'
+    CONSILIARIO_SEGUNDO = 'CONSILIARIO_SEGUNDO', 'Consiliario Segundo'
+    FISCAL_PRIMERO = 'FISCAL_PRIMERO', 'Fiscal Primero'
+    FISCAL_SEGUNDA = 'FISCAL_SEGUNDA', 'Fiscal Segunda'
+    MAYORDOMO_PRIMERO = 'MAYORDOMO_PRIMERO', 'Mayordomo Primero'
+    MAYORDOMO_SEGUNDO = 'MAYORDOMO_SEGUNDO', 'Mayordomo Segundo'
+    SECRETARIO_PRIMERO = 'SECRETARIO_PRIMERO', 'Secretario Primero'
+    SECRETARIO_SEGUNDO = 'SECRETARIO_SEGUNDO', 'Secretario Segundo'
+    ARCHIVERO = 'ARCHIVERO', 'Archivero'
+    PRIOSTE_PRIMERO = 'PRIOSTE_PRIMERO', 'Prioste Primero'
+    PRIOSTE_SEGUNDO = 'PRIOSTE_SEGUNDO', 'Prioste Segundo'
+    DIPUTADO_CARIDAD = 'DIPUTADO_CARIDAD', 'Diputado de Caridad'
+    DIPUTADO_FORMACION = 'DIPUTADO_FORMACION', 'Diputado de Formación'
+    DIPUTADO_MAYOR_GOBIERNO = 'DIPUTADO_MAYOR_GOBIERNO', 'Diputado Mayor de Gobierno'
 
 
 # Create your models here.
@@ -75,57 +96,44 @@ class Culto(models.Model):
     def __str__(self):
         return self.nombre
 
+def anio_actual():
+    return datetime.now().year
 
 
 class PapeletaSitio(models.Model):
-    codigo=models.CharField(max_length=15)
-    tipo= models.CharField(
+    codigo = models.CharField(max_length=15)
+    fecha_obtencion = models.DateTimeField(default=timezone.now)
+    anyo = models.IntegerField(default=anio_actual)
+    tipo = models.CharField(
         max_length=50,
-        choices= TipoPapeleta.choices,
-        default= TipoPapeleta.GENERAL
+        choices=TipoPapeleta.choices,
+        default=TipoPapeleta.GENERAL
     )
     hermano = models.ForeignKey(
         'Hermano',
         on_delete=models.DO_NOTHING,
-        related_name= 'papeletas'
+        related_name='papeletas'
     )
 
+    @property
+    def generar_codigo(self):
+        ultimo = PapeletaSitio.objects.order_by('id').last()
+        ultimo_id = ultimo.id if ultimo else 0
+        return f"CP{self.anyo}{ultimo_id + 1}"
 
+def fecha_fin_default():
+    return timezone.now().date() + relativedelta(years=4)
 
+class JuntaGobierno(models.Model):
+    fecha_inicio = models.DateField(default=timezone.now)
+    fecha_fin = models.DateField(default=fecha_fin_default)
 
+    def __str__(self):
+        return f"Junta desde {self.fecha_inicio} hasta {self.fecha_fin}"
 
+class MiembroJunta(models.Model):
+    junta_gobierno = models.ForeignKey('JuntaGobierno', on_delete=models.CASCADE, related_name='miembros')
+    cargo = models.CharField(max_length=80, choices=CargoHermandad.choices)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class PapeletaSitio(models.Model):
-#     codigo = models.CharField(max_length=15)
-#
-#     tipo = models.CharField(
-#         max_length=40,
-#         choices=TipoPapelta.choices,
-#         default=TipoPapelta.GENERICA
-#     )
-#
-#     hermano = models.ForeignKey(
-#         'Hermano',
-#         on_delete= models.DO_NOTHING,
-#         related_name='papeletas'
-#     )
-#
-#     def __str__(self):
-#         return self.codigo + self.hermano.nombre + self.hermano.dni
-
-
-
+    def __str__(self):
+        return self.junta_gobierno.id + self.cargo.lower()
