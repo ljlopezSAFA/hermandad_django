@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap_icons %}
-
+{% load static %}
 {% block content %}
     <h1>{% if papeleta.id %}Editar{% else %}Crear{% endif %} Papeleta de Sitio</h1>
     <br>
@@ -10,57 +10,46 @@
                  src="https://static.grupojoly.com/clip/f9d13b75-a786-4f28-a0a4-9aef3f39e1ea_source-aspect-ratio_1600w_0.jpg"
                  style="max-height: 400px; max-width: 400px" alt="Papeleta de Sitio">
         </div>
-        <br>
 
         <div class="col-md-7">
             <br>
             <form method="post">
                 {% csrf_token %}
 
-
-
-                <!-- Campo de código -->
+                <!-- Código con label flotante -->
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="codigo" name="codigo"
-                           placeholder="Código de la papeleta" readonly
-                           value="{% if papeleta %}{{ papeleta.codigo }}{% endif %}" required>
-                    <label for="codigo">{% bs_icon 'file-earmark-text' %} Código</label>
+                    {{ form.codigo }}
+                    <label for="{{ form.codigo.id_for_label }}">Código de la papeleta</label>
                 </div>
 
-
-                <div class="form-floating">
-                    <select class="form-select" id="tipo" name="tipo" aria-label="Selecciona tipo de papeleta">
-                        {% for valor,nombre in elecciones %}
-
-                            <option value="{{ valor }}"
-                                    {% if papeleta.tipo == valor %}selected{% endif %}>{{ nombre }}</option>
-
-                        {% endfor %}
-                    </select>
-                    <label for="floatingSelect">Selecciona tipo de papeleta</label>
+                <!-- Tipo con label flotante -->
+                <div class="form-floating mb-3">
+                    {{ form.tipo }}
+                    <label for="{{ form.tipo.id_for_label }}">Tipo</label>
                 </div>
 
-                <br>
+                <!-- Hermano con label flotante -->
+                <div class="mb-3 position-relative">
+                    {{ form.hermano }}
+                    <label for="{{ form.hermano.id_for_label }}"
+                           class="form-label floating-label">{% bs_icon 'person' %}
+                        Selecciona Hermano</label>
 
-                <div class="form-floating">
-                    <select class="form-select" id="hermano" name="hermano" aria-label="Selecciona hermano">
-                        {% for h in hermanos %}
-                            <option value="{{ h.id }}" {% if h.id == papeleta.hermano.id %} selected {% endif %}>
-                                {{ h.nombre }},{{ h.apellidos }}</option>
-
-                        {% endfor %}
-                    </select>
-                    <label for="floatingSelect">Selecciona hermano</label>
                 </div>
 
-
-                <br>
-                <!-- Botón de guardar -->
                 <button type="submit" class="btn-amargura">
                     {% if papeleta.id %}Actualizar{% else %}Crear{% endif %}
                 </button>
-
             </form>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#id_hermano').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+            });
+        });
+    </script>
 {% endblock %}

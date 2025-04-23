@@ -158,28 +158,24 @@ def junta_gobierno(request):
 
 def crear_o_editar_papeleta(request, id=None):
     if id:
-        papeleta = PapeletaSitio.objects.get(id=id)
+        papeleta = get_object_or_404(PapeletaSitio, id=id)
     else:
+        # Creamos la papeleta pero sin guardarla aún
         papeleta = PapeletaSitio()
         papeleta.codigo = papeleta.generar_codigo
 
     if request.method == 'POST':
-        # Recoger datos
-        papeleta.codigo = request.POST['codigo']
-        papeleta.tipo = request.POST['tipo']
-        papeleta.hermano = Hermano.objects.get(id=request.POST['hermano'])
-
-        # Guardar en bbdd la papeleta
-        papeleta.save()
-
-        # Redirigir al usuario a la pagina de listado
-        return redirect('papeletas')
+        form = PapeletaForm(request.POST, instance=papeleta)
+        if form.is_valid():
+            form.save()
+            return redirect('papeletas')
     else:
-        elecciones = TipoPapeleta.choices
-        hermanos = Hermano.objects.all()
-        return render(request, 'formulario_papeletas.html', {'elecciones': elecciones,
-                                                             'hermanos': hermanos,
-                                                             'papeleta': papeleta})
+        form = PapeletaForm(instance=papeleta)
+
+    return render(request, 'formulario_papeletas.html', {
+        'form': form,
+        'papeleta': papeleta  # por si aún lo usas para mostrar en template
+    })
 
 
 def crear_titular(request):

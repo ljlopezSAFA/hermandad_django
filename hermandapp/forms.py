@@ -59,6 +59,21 @@ class PapeletaForm(forms.ModelForm):
     class Meta:
         model = PapeletaSitio
         fields = ['codigo', 'tipo', 'hermano']
+        widgets = {
+            'codigo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Código de la papeleta',
+                'readonly': 'readonly'
+            }),
+            'tipo': forms.Select(attrs={
+                'class': 'form-select',
+            }),
+            'hermano': forms.Select(
+                attrs={
+                    'class': 'form-select',
+                    'data-placeholder': 'Selecciona hermano',
+                }),
+        }
 
 
 class TitularForm(forms.ModelForm):
