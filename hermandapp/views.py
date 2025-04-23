@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, get_object_or_404
 from hermandapp.forms import *
 from hermandapp.models import *
@@ -190,3 +191,37 @@ def crear_titular(request):
     else:
         formulario_nuevo = TitularForm()
         return render(request, 'formulario_titular.html', {'formulario': formulario_nuevo})
+
+
+def registrar_usuario(request):
+    form = RegistroFormulario()
+    if request.method == 'POST':
+        form = RegistroFormulario(request.POST)
+
+        if form.is_valid():
+            usuario_nuevo = form.save(commit=False)
+            usuario_nuevo.set_password(form.cleaned_data['password'])
+            usuario_nuevo.save()
+            return redirect('login')
+    else:
+        return render(request, "registro.html", {'form': form})
+
+
+def loguearse(request):
+    form = LoginFormulario()
+    if request.method == 'POST':
+        form = LoginFormulario(request, data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            usuario = authenticate(request, email=email, password=password)
+            if usuario is not None:
+                login(request, usuario)
+                return redirect('home')
+    else:
+        return render(request, "login.html", {'form': form})
+
+
+def logout_usuario(request):
+    logout(request)
+    return redirect('login')

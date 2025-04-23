@@ -22,4 +22,7 @@ urlpatterns = [
     path('eliminar_papelta/<int:id>/', eliminar_papeleta, name='eliminar_papeleta'),
     path('listar_papeletas/', listar_papeletas, name='papeletas'),
     path('junta_gobierno/', junta_gobierno, name='junta_gobierno'),
+    # URLS DE LOGIN Y REGISTRO
+    path('registro/', registrar_usuario, name='registro'),
+    path('login/', loguearse, name='login'),
 ]
