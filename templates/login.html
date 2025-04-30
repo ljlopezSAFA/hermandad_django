@@ -2,12 +2,57 @@
 {% load bootstrap_icons %}
 
 {% block content %}
-    <h1>Login</h1>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn-amargura">Iniciar Sesion</button>
-    </form>
 
+    <div class="row">
+        <div class="col-md-5">
+            <img class="cubrir-contenedor-sin-borde"
+                 src="https://cdn.santasemana.es/wp-content/uploads/2024/02/amargura.png"
+                 style="max-height: 400px; max-width: 400px" alt="Papeleta de Sitio">
+        </div>
+
+        <div class="col-md-7">
+            <h1>Iniciar Sesión</h1>
+            <br>
+            <form method="post">
+                {% csrf_token %}
+
+                <br>
+
+
+                <div class="form-floating mb-3">
+                    {{ form.username }}
+                    <label for="email">{% bs_icon 'envelope' %} Correo electrónico</label>
+                </div>
+                <br>
+
+                <div class="form-floating mb-3">
+                    {{ form.password }}
+                    <label for="password">{% bs_icon 'lock' %} Contraseña</label>
+                </div>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <label style="display:flex; text-align:left;">{{ error }}</label>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <br>
+                <br>
+
+                <button type="submit" class="btn-amargura">Iniciar Sesion</button>
+                <br>
+
+
+                <a href="{% url 'registro' %}" style="color: darkred">
+                    Aún no tengo cuenta
+                </a>
+
+
+            </form>
+        </div>
+    </div>
 {% endblock %}

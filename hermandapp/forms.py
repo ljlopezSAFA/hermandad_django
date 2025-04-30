@@ -143,4 +143,15 @@ class RegistroFormulario(forms.ModelForm):
 
 
 class LoginFormulario(AuthenticationForm):
-    username = forms.EmailField(label="Correo Electrónico")
+    def __init__(self, *args, **kwargs):
+        super(LoginFormulario, self).__init__(*args, **kwargs)
+        self.fields['username'].widget = forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Correo',
+            'id': 'email'
+        })
+        self.fields['password'].widget = forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contraseña',
+            'id': 'password'
+        })

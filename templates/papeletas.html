@@ -19,21 +19,24 @@
                                 <p>{% bs_icon 'clock' %}<strong>Fecha
                                     obetención:</strong> {{ papeleta.fecha_obtencion }}</p>
                                 <p>{% bs_icon 'calendar' %}<strong>Año:</strong> {{ papeleta.anyo }}</p>
-                                <div class="acciones">
-                                    <div class="row centrar">
-                                        <div class="col-md-4">
-                                            <a href="{% url 'editar_papeleta' papeleta.id %}">
-                                            <button class="btn-amargura">{% bs_icon 'pen' %}</button>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a href="{% url 'eliminar_papeleta' papeleta.id %}">
-                                            <button class="btn-amargura">{% bs_icon 'trash' %}</button>
-                                            </a>
-                                        </div>
-                                    </div>
 
-                                </div>
+                                {% if user.rol == 'admin' %}
+                                    <div class="acciones">
+                                        <div class="row centrar">
+                                            <div class="col-md-4">
+                                                <a href="{% url 'editar_papeleta' papeleta.id %}">
+                                                    <button class="btn-amargura">{% bs_icon 'pen' %}</button>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a href="{% url 'eliminar_papeleta' papeleta.id %}">
+                                                    <button class="btn-amargura">{% bs_icon 'trash' %}</button>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -46,10 +49,13 @@
         <p>No hay papeletas de sitio registradas.</p>
     {% endif %}
 
-     <br>
-    <a href="{% url 'crear_papeleta' %}">
-        <button class="btn-amargura">Nueva Papeleta de Sitio</button>
-    </a>
+    <br>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'crear_papeleta' %}">
+            <button class="btn-amargura">Nueva Papeleta de Sitio</button>
+        </a>
+    {% endif %}
 
     <style>
 

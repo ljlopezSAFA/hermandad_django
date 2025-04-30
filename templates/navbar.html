@@ -1,3 +1,4 @@
+{% load bootstrap_icons %}
 {% load static %}
 
 {% block header %}
@@ -19,11 +20,15 @@
             <div style="width: 60px;"></div>
         </div>
 
-        <!-- Botón del menú lateral -->
-        <button class="navbar-toggler position-absolute end-0 me-3" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
+        {% if user.is_authenticated %}
+            <!-- Botón del menú lateral -->
+            <button class="navbar-toggler position-absolute end-0 me-3" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        {% endif %}
+
 
         <!-- Menú lateral -->
         <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
@@ -45,18 +50,23 @@
                     <li class="nav-item">
                         <a class="nav-link special-text" href="{% url 'junta_gobierno' %}">Junta de Gobierno</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'hermanos' %}">Hermanos</a>
-                    </li>
+                    {% if user.rol == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link special-text" href="{% url 'hermanos' %}">Hermanos</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link special-text" href="{% url 'cultos' %}">Cultos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link special-text" href="{% url 'composiciones' %}">Composiciones Musicales</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'papeletas' %}">Gestión de Papeletas de Sitio</a>
-                    </li>
+                    {% if user.rol == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link special-text" href="{% url 'papeletas' %}">Gestión de Papeletas de
+                                Sitio</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle special-text"
                            href="#" role="button" data-bs-toggle="dropdown"
@@ -68,6 +78,10 @@
                             <li><a class="dropdown-item special-text" href="#">Noticias</a></li>
                             <li><a class="dropdown-item special-text" href="#">Contacto</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-text" href="{% url 'logout' %}">{% bs_icon 'box-arrow-left' %}
+                            Logout</a>
                     </li>
                 </ul>
             </div>

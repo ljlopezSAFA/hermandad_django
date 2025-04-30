@@ -126,3 +126,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # USUARIOS DEL SISTEMA
 AUTH_USER_MODEL = 'hermandapp.Usuario'
+
+# RUTAS DE AUTENTIFICACIÓN
+LOGIN_URL = '/login/'  #Ruta a la vista de login
+LOGIN_REDIRECT_URL = '/home/'  #Ruta a la que se redirige tras iniciar sesión correctamente
+
+
+# Páginas de error
+handler403 = 'hermandapp.views.error_403'

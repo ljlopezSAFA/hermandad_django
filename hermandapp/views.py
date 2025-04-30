@@ -1,9 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from hermandapp.forms import *
 from hermandapp.models import *
 
 
+def es_admin(user):
+    if not user.is_authenticated or not user.rol == 'admin':
+        raise PermissionDenied
+    return True
+
+
+def es_gestor(user):
+    if not user.is_authenticated or not  user.rol == 'gestor':
+        raise PermissionDenied
+    return True
+
+
+@login_required
 def go_home(request):
     return render(request, 'home.html')
 
@@ -12,6 +28,7 @@ def go_about_us(request):
     return render(request, 'about_us.html')
 
 
+@login_required
 def go_templo_page(request):
     return render(request, 'templo.html')
 
@@ -75,6 +92,7 @@ def eliminar_composicion(request, id):
     return redirect('composiciones')
 
 
+@user_passes_test(es_admin)
 def crear_editar(request, id):
     if id != 0:
         hermano = get_object_or_404(Hermano, id=id)  # Si existe, lo obtenemos
@@ -94,6 +112,7 @@ def crear_editar(request, id):
     return render(request, 'formulario_hermanos.html', {'form': form})
 
 
+@user_passes_test(es_admin)
 def eliminar_hermano(request, id):
     hermano = get_object_or_404(Hermano, id=id)  # Si existe, lo obtenemos
 
@@ -157,6 +176,8 @@ def junta_gobierno(request):
     })
 
 
+
+@user_passes_test(es_admin)
 def crear_o_editar_papeleta(request, id=None):
     if id:
         papeleta = get_object_or_404(PapeletaSitio, id=id)
@@ -225,3 +246,11 @@ def loguearse(request):
 def logout_usuario(request):
     logout(request)
     return redirect('login')
+
+
+def error_403(request, exception=None):
+    return render(request, '403.html', status=403)
+
+
+def error_404(request, exception=None):
+    return render(request, '404.html', status=404)
