@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -14,7 +15,7 @@ def es_admin(user):
 
 
 def es_gestor(user):
-    if not user.is_authenticated or not  user.rol == 'gestor':
+    if not user.is_authenticated or not user.rol == 'gestor':
         raise PermissionDenied
     return True
 
@@ -176,7 +177,6 @@ def junta_gobierno(request):
     })
 
 
-
 @user_passes_test(es_admin)
 def crear_o_editar_papeleta(request, id=None):
     if id:
@@ -254,3 +254,78 @@ def error_403(request, exception=None):
 
 def error_404(request, exception=None):
     return render(request, '404.html', status=404)
+
+
+def ir_tienda(request):
+    listado_productos = Producto.objects.all()
+    return render(request, 'tienda.html', {'productos': listado_productos})
+
+
+def add_carrito(request, id):
+    carrito = request.session.get('carrito', {})
+    producto_en_carrito = carrito.get(str(id),0)
+
+    # Comprobar si en session existe el id del producto
+    if producto_en_carrito == 0:
+        # NO
+        # lo añado nuevo y en la cantidad -> 1
+        carrito[str(id)] = 1
+
+    else:
+        # SI
+        # cantidad + 1
+        carrito[str(id)] += 1
+
+    request.session['carrito'] = carrito
+
+    return redirect('tienda')
+
+
+def ver_carrito(request):
+    carrito = {}
+    total = 0.0
+    carrito_session = request.session.get('carrito',{})
+
+    # Recuperar de session todos mis productos y sus cantidades
+    for k,v in carrito_session.items():
+        producto = Producto.objects.get(id=k)
+        carrito[producto] = v
+        total += producto.precio * v
+
+    return render(request, 'carrito.html', {'carrito': carrito, 'total': total})
+
+
+
+
+def comprar(request):
+
+    nuevo_pedido = Pedido()
+    nuevo_pedido.codigo = 'CP0001'
+    nuevo_pedido.fecha = datetime.now()
+    nuevo_pedido.hermano = request.user
+
+    carrito_session = request.session.get('carrito', {})
+
+    for k, v in carrito_session.items():
+        linea_pedido = LineaPedido()
+        producto = Producto.objects.get(id=k)
+        linea_pedido.producto = producto
+        linea_pedido.precio = producto.precio
+        linea_pedido.cantidad = v
+        linea_pedido.pedido = nuevo_pedido
+        linea_pedido.save()
+
+
+    nuevo_pedido.save()
+
+
+
+
+
+
+
+
+
+
+
+

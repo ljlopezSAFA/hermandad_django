@@ -61,6 +61,12 @@
                     <li class="nav-item">
                         <a class="nav-link special-text" href="{% url 'composiciones' %}">Composiciones Musicales</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-text" href="{% url 'tienda' %}">Tienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-text" href="{% url 'ver_carrito' %}">Carrito</a>
+                    </li>
                     {% if user.rol == 'admin' %}
                         <li class="nav-item">
                             <a class="nav-link special-text" href="{% url 'papeletas' %}">Gestión de Papeletas de
