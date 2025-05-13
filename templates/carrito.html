@@ -13,7 +13,8 @@
             <th scope="col">Nombre</th>
             <th scope="col">Descripcion</th>
             <th scope="col">Cantidad</th>
-            <th scope="col">Precio</th>
+            <th scope="col">Precio Ud</th>
+{#            <th scope="col"></th>#}
         </tr>
         </thead>
         <tbody>
@@ -26,8 +27,27 @@
                 </th>
                 <th>{{ k.nombre }}</th>
                 <th>{{ k.descripcion }}</th>
-                <th>{{ v }}</th>
+                <th>
+
+
+                    <a href="{% url 'restar_carrito' k.id %}">
+                        <button class="btn btn-sm">{% bs_icon 'dash-circle' %}</button>
+                    </a>
+
+                    {{ v }}
+
+                    <a href="{% url 'sumar_carrito' k.id %}">
+                        <button class="btn btn-sm">{% bs_icon 'plus-circle' %}</button>
+                    </a>
+
+
+                </th>
                 <th>{{ k.precio }} €</th>
+                <th>
+                    <a href="{% url 'quitar_de_carrito' k.id %}">
+                        <button class="btn btn-sm">{% bs_icon 'x-circle' %}</button>
+                    </a>
+                </th>
             </tr>
 
         {% endfor %}
@@ -35,7 +55,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th> <b>TOTAL DE LA COMPRA</b></th>
+            <th><b>TOTAL DE LA COMPRA</b></th>
             <th>{{ total }} €</th>
         </tr>
 

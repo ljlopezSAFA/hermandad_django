@@ -1,9 +1,11 @@
-import requests
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+
 from hermandapp.forms import *
 from hermandapp.models import *
 
@@ -35,8 +37,27 @@ def go_templo_page(request):
 
 
 def cargar_listado_hermanos(request):
-    lista_hermanos = Hermano.objects.all()
-    return render(request, 'hermanos.html', {'hermanos': lista_hermanos})
+    busqueda = request.GET.get('busqueda', '')
+    hermanos_qs = Hermano.objects.all()
+
+    if busqueda:
+        hermanos_qs = hermanos_qs.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(apellidos__icontains=busqueda) |
+            Q(dni__icontains=busqueda) |
+            Q(mail__icontains=busqueda) |
+            Q(telefono__icontains=busqueda)
+        )
+
+    # Paginación
+    paginator = Paginator(hermanos_qs.order_by('apellidos'), 10)  # 10 hermanos por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'hermanos.html', {
+        'hermanos': page_obj,  # esto es un Page object
+        'busqueda': busqueda,  # para mantener el valor en el input
+    })
 
 
 def cargar_cultos(request):
@@ -263,7 +284,7 @@ def ir_tienda(request):
 
 def add_carrito(request, id):
     carrito = request.session.get('carrito', {})
-    producto_en_carrito = carrito.get(str(id),0)
+    producto_en_carrito = carrito.get(str(id), 0)
 
     # Comprobar si en session existe el id del producto
     if producto_en_carrito == 0:
@@ -277,6 +298,7 @@ def add_carrito(request, id):
         carrito[str(id)] += 1
 
     request.session['carrito'] = carrito
+    messages.success(request, "Producto añadido correctamente al carrito.")
 
     return redirect('tienda')
 
@@ -284,10 +306,10 @@ def add_carrito(request, id):
 def ver_carrito(request):
     carrito = {}
     total = 0.0
-    carrito_session = request.session.get('carrito',{})
+    carrito_session = request.session.get('carrito', {})
 
     # Recuperar de session todos mis productos y sus cantidades
-    for k,v in carrito_session.items():
+    for k, v in carrito_session.items():
         producto = Producto.objects.get(id=k)
         carrito[producto] = v
         total += producto.precio * v
@@ -295,10 +317,41 @@ def ver_carrito(request):
     return render(request, 'carrito.html', {'carrito': carrito, 'total': total})
 
 
+def restar_carrito(request, id):
+    carrito = request.session.get('carrito', {})
+    producto_id = str(id)
+
+    if producto_id in carrito:
+        if carrito[producto_id] > 1:
+            carrito[producto_id] -= 1
+        else:
+            del carrito[producto_id]  # si llega a 0, lo quitamos
+
+    request.session['carrito'] = carrito
+    return redirect('ver_carrito')
+
+
+def sumar_carrito(request, id):
+    carrito = request.session.get('carrito', {})
+    producto_id = str(id)
+
+    carrito[producto_id] = carrito.get(producto_id, 0) + 1
+
+    request.session['carrito'] = carrito
+    return redirect('ver_carrito')  # importante: vuelve al carrito
+
+
+def quitar_de_carrito(request, id):
+    carrito = request.session.get('carrito', {})
+    producto_id = str(id)
+
+    del carrito[producto_id]
+
+    request.session['carrito'] = carrito
+    return redirect('ver_carrito')
 
 
 def comprar(request):
-
     nuevo_pedido = Pedido()
     nuevo_pedido.codigo = 'CP0001'
     nuevo_pedido.fecha = datetime.now()
@@ -315,17 +368,4 @@ def comprar(request):
         linea_pedido.pedido = nuevo_pedido
         linea_pedido.save()
 
-
     nuevo_pedido.save()
-
-
-
-
-
-
-
-
-
-
-
-

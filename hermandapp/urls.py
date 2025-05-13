@@ -25,8 +25,10 @@ urlpatterns = [
     path('tienda/', ir_tienda, name='tienda'),
     path('carrito/add/<int:id>/', add_carrito, name='add_carrito'),
     path('ver_carrito/', ver_carrito, name='ver_carrito'),
+    path('carrito/sumar/<int:id>/', sumar_carrito, name='sumar_carrito'),
+    path('carrito/restar/<int:id>/', restar_carrito, name='restar_carrito'),
     path('completar_compra/', comprar, name='comprar'),
-
+    path('carrito/quitar/<int:id>/', quitar_de_carrito, name='quitar_de_carrito'),
     # URLS DE LOGIN Y REGISTRO
     path('registro/', registrar_usuario, name='registro'),
     path('login/', loguearse, name='login'),

@@ -4,6 +4,23 @@
 {% block content %}
 
     <h1>Listado de Hermanos</h1>
+    
+  
+   
+        <form method="get">
+          <div class="row centrar">
+                 <div class="col-md-10">
+                  <input id="busqueda" name="busqueda" class="form-control" type="text" value="{{ busqueda }}">
+                 </div>
+                  <div class="col-md-1">
+                   <input type="submit" class="btn-amargura" value="Buscar">
+                 </div>
+          </div>
+            
+        </form>
+    
+    
+   
 
 
     <table class="table">
@@ -36,11 +53,9 @@
                     <a href="{% url 'hermanos_gestion' id=h.id %}">
                         <button class="btn-amargura">{% bs_icon 'pen' %}</button>
                     </a>
-
                     <a href="{% url 'eliminar_hermano' id=h.id %}">
                         <button class="btn-amargura">{% bs_icon 'trash' %}</button>
                     </a>
-
                 </th>
             </tr>
 
@@ -49,6 +64,30 @@
 
         </tbody>
     </table>
+    
+   <nav aria-label="Paginación">
+    <ul class="paginacion-personalizada">
+        {% if hermanos.has_previous %}
+            <li><a href="?page={{ hermanos.previous_page_number }}&busqueda={{ busqueda }}">«</a></li>
+        {% else %}
+            <li class="disabled"><span>«</span></li>
+        {% endif %}
+
+        {% for num in hermanos.paginator.page_range %}
+            {% if hermanos.number == num %}
+                <li class="activo"><span>{{ num }}</span></li>
+            {% else %}
+                <li><a href="?page={{ num }}&busqueda={{ busqueda }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if hermanos.has_next %}
+            <li><a href="?page={{ hermanos.next_page_number }}&busqueda={{ busqueda }}">»</a></li>
+        {% else %}
+            <li class="disabled"><span>»</span></li>
+        {% endif %}
+    </ul>
+</nav>
 
 
     <a href="{% url 'hermanos_gestion' id=0 %}">

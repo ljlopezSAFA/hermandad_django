@@ -10,12 +10,12 @@
                 {% for p in productos %}
                     <div class="col-md-4" style="padding-top: 10px;">
                         <div class="papeleta-card">
-                            <div class="marca-agua"></div>
+                            <!-- Marca de agua personalizada por producto -->
+                            <div class="marca-agua" style="background-image: url('{{ p.foto }}');"></div>
                             <div class="contenido">
-                                <p>{% bs_icon 'upc' %}<strong>Nombre:</strong> {{ p.nombre }}</p>
-                                <p>{% bs_icon 'toggle-off' %}<strong>Descripcion:</strong> {{ p.descripcion }}</p>
-                                <p>{% bs_icon 'person' %}<strong>Precio:</strong> {{ p.precio }}
-
+                                <p>{% bs_icon 'upc' %}<strong> Nombre:</strong> {{ p.nombre }}</p>
+                                <p>{% bs_icon 'toggle-off' %}<strong> Descripción:</strong> {{ p.descripcion }}</p>
+                                <p>{% bs_icon 'person' %}<strong> Precio Ud:</strong> {{ p.precio }}</p>
 
                                 <div class="acciones">
                                     <div class="row centrar">
@@ -25,31 +25,22 @@
                                             </a>
                                         </div>
                                     </div>
-
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
                     <br>
                 {% endfor %}
             </div>
         </div>
     {% else %}
-        <p>No hay prodcutos.</p>
+        <p>No hay productos.</p>
     {% endif %}
 
     <br>
 
-    {#    {% if user.is_authenticated %}#}
-    {#        <a href="{% url 'crear_papeleta' %}">#}
-    {#            <button class="btn-amargura">Nuevo Productos</button>#}
-    {#        </a>#}
-    {#    {% endif %}#}
-
     <style>
-
         .papeletas-container {
             display: flex;
             flex-direction: column;
@@ -58,12 +49,13 @@
 
         .papeleta-card {
             position: relative;
-            background: #fdf6e3; /* color papel antiguo */
+            background: #fdf6e3;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border: 1pt solid darkred;
             overflow: hidden;
+            height: 300px; /* Tamaño fijo opcional para recorte */
         }
 
         .marca-agua {
@@ -72,11 +64,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('/static/images/marca_agua_papeletas.jpg'); /* asegúrate de que esta ruta sea válida */
             background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3; /* más tenue para que no moleste al texto */
+            background-size: cover;      /* Escala la imagen para cubrir el área */
+            background-position: center; /* Centra la imagen */
+            opacity: 0.5;
             pointer-events: none;
             z-index: 0;
         }

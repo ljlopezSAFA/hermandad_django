@@ -216,6 +216,53 @@ input[type="date"] {
     align-items: center; /* Centra verticalmente el texto */
 }
 
+
+.paginacion-personalizada {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    padding-left: 0;
+    margin-top: 2rem;
+}
+
+.paginacion-personalizada li {
+    display: inline;
+}
+
+.paginacion-personalizada li a,
+.paginacion-personalizada li span {
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    background-color: #f4e8e8; /* color fondo normal */
+    color: darkred;            /* color texto normal */
+    text-decoration: none;
+    border: 1px solid darkred;
+    transition: background 0.3s;
+}
+
+.paginacion-personalizada li a:hover {
+    background-color: #ffe6e6; /* hover más claro */
+}
+
+.paginacion-personalizada .activo span {
+    background-color: darkred;
+    color: white;
+    font-weight: bold;
+}
+
+.paginacion-personalizada .disabled span {
+    background-color: #ddd;
+    color: #999;
+    cursor: not-allowed;
+}
+
+a {
+    color: inherit;         /* Usa el color del texto circundante */
+    text-decoration: none;  /* Quita el subrayado */
+}
+
 @media (max-width: 768px) {
     .custom-card .row {
         flex-direction: column;
