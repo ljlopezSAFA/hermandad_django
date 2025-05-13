@@ -5,82 +5,105 @@
     <h1>Tienda de la hermandad</h1>
 
     {% if productos %}
-        <div class="papeletas-container">
-            <div class="row">
-                {% for p in productos %}
-                    <div class="col-md-4" style="padding-top: 10px;">
-                        <div class="papeleta-card">
-                            <!-- Marca de agua personalizada por producto -->
-                            <div class="marca-agua" style="background-image: url('{{ p.foto }}');"></div>
-                            <div class="contenido">
-                                <p>{% bs_icon 'upc' %}<strong> Nombre:</strong> {{ p.nombre }}</p>
-                                <p>{% bs_icon 'toggle-off' %}<strong> Descripción:</strong> {{ p.descripcion }}</p>
-                                <p>{% bs_icon 'person' %}<strong> Precio Ud:</strong> {{ p.precio }}</p>
+        <div class="row">
+            {% for p in productos %}
+                <div class="col-md-4 mb-4">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <!-- Frente: solo imagen -->
+                            <div class="flip-card-front">
+                                <img src="{{ p.foto }}" alt="Producto"/>
+                                <div class="titulo-producto">{{ p.nombre }}</div>
+                            </div>
 
-                                <div class="acciones">
-                                    <div class="row centrar">
-                                        <div class="col-md-4">
-                                            <a href="{% url 'add_carrito' p.id %}">
-                                                <button class="btn-amargura">{% bs_icon 'cart-plus' %}</button>
-                                            </a>
-                                        </div>
+                            <!-- Parte trasera: texto + botón -->
+                            <div class="flip-card-back">
+                                <div class="contenido">
+                                    <p>{% bs_icon 'upc' %} <strong>Nombre:</strong> {{ p.nombre }}</p>
+                                    <p>{% bs_icon 'toggle-off' %} <strong>Descripción:</strong> {{ p.descripcion }}</p>
+                                    <p>{% bs_icon 'person' %} <strong>Precio:</strong> {{ p.precio }}</p>
+
+                                    <div class="acciones text-center mt-3">
+                                        <a href="{% url 'add_carrito' p.id %}">
+                                            <button class="btn-amargura">{% bs_icon 'cart-plus' %}</button>
+                                        </a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <br>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
         <p>No hay productos.</p>
     {% endif %}
 
-    <br>
-
     <style>
-        .papeletas-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        /* Estructura de la flip-card */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            perspective: 1000px;
         }
 
-        .papeleta-card {
+        .flip-card-inner {
             position: relative;
-            background: #fdf6e3;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 1pt solid darkred;
-            overflow: hidden;
-            height: 300px; /* Tamaño fijo opcional para recorte */
-        }
-
-        .marca-agua {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background-repeat: no-repeat;
-            background-size: cover;      /* Escala la imagen para cubrir el área */
-            background-position: center; /* Centra la imagen */
-            opacity: 0.5;
-            pointer-events: none;
-            z-index: 0;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
         }
 
-        .contenido {
-            position: relative;
-            z-index: 1;
-            text-align: left;
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
         }
 
-        .acciones {
-            margin-top: 1rem;
+        /* Caras de la tarjeta */
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* Frente: imagen */
+        .flip-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Parte trasera: info */
+        .flip-card-back {
+            background-color: #ffffff;
+            color: black;
+            transform: rotateY(180deg);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Estilo del nombre sobre la imagen */
+        .titulo-producto {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente negro */
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: bold;
+            font-size: 1rem;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
     </style>
-
 {% endblock %}
