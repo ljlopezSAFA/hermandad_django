@@ -188,11 +188,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 
 
-
-
-
-
-
 class Producto(models.Model):
     nombre = models.CharField(max_length=250)
     descripcion = models.CharField(max_length=500)
