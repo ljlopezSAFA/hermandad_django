@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load bootstrap_icons %}
+
+{% block content %}
+
+    <h1>Mis Pedidos</h1>
+
+    {% if pedidos %}
+        <div class="accordion" id="pedidosAccordion">
+            {% for pedido in pedidos %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                                aria-controls="collapse{{ forloop.counter }}">
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4> Pedido Código: {{ pedido.codigo }} </h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 tabindex="3"> Fecha: {{ pedido.fecha|date:"d/m/Y H:i" }} </h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 tabindex="5"><b> Total:  {{ pedido.total }}</b></h5>
+                                </div>
+                            </div>
+                            
+                        </button>
+                    </h2>
+                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                         aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#pedidosAccordion">
+                        <div class="">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio Ud</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for linea in pedido.linea_pedidos.all %}
+                                    <tr>
+                                        <td>{{ linea.producto.nombre }}</td>
+                                        <td>{{ linea.precio|floatformat:2 }} €</td>
+                                        <td>{{ linea.cantidad }}</td>
+                                        <td>{{ linea.subtotal|floatformat:2 }} €</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No tienes pedidos registrados.</p>
+    {% endif %}
+
+{% endblock %}

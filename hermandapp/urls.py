@@ -31,6 +31,9 @@ urlpatterns = [
     path('carrito/quitar/<int:id>/', quitar_de_carrito, name='quitar_de_carrito'),
     # URLS DE LOGIN Y REGISTRO
     path('registro/', registrar_usuario, name='registro'),
+    path('mis_pedidos/', mis_pedidos, name='mis_pedidos'),
+    path('nueva_junta_gobierno/', nueva_junta, name='nueva_junta'),
+    path('guardar_junta/', guardar_junta, name='guardar_junta'),
     path('login/', loguearse, name='login'),
     path('logout/', logout_usuario, name='logout'),
 

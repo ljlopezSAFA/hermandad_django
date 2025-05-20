@@ -24,24 +24,25 @@
                                 <p class="card-text"><small class="text-muted">{{ c.fecha_creacion }}</small></p>
                             </div>
                         </div>
-                        <div class="col-md-2  alinear-final">
-                            <div class="row centrar" >
-                                <div class="col-md-6">
-                                    <a href="{% url 'new_composicion' id=c.id %}" class="mb-2">
-                                        <button class="btn-amargura">{% bs_icon 'pen' %}</button>
-                                    </a>
+
+                       {% if user.rol == 'admin' %}
+                            <div class="col-md-2  alinear-final">
+                                <div class="row centrar">
+                                    <div class="col-md-6">
+                                        <a href="{% url 'new_composicion' id=c.id %}" class="mb-2">
+                                            <button class="btn-amargura">{% bs_icon 'pen' %}</button>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="{% url 'eliminar' id=c.id %}">
+                                            <button class="btn-amargura">{% bs_icon 'trash' %}</button>
+                                        </a>
+
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <a href="{% url 'eliminar' id=c.id %}">
-                                        <button class="btn-amargura">{% bs_icon 'trash' %}</button>
-                                    </a>
-
-                                </div>
-
-
                             </div>
 
-                        </div>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -57,9 +58,11 @@
     </div>
 
 
-    <a href="{% url 'new_composicion' id=0 %}">
-        <button class="btn-amargura">Crear Composición</button>
-    </a>
+    {% if user.rol == 'admin' %}
+        <a href="{% url 'new_composicion' id=0 %}">
+            <button class="btn-amargura">Crear Composición</button>
+        </a>
+    {% endif %}
 
 
 

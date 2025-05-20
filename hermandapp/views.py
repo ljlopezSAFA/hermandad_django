@@ -1,3 +1,5 @@
+from uuid import uuid4, uuid1
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -5,9 +7,11 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.defaultfilters import random
 
 from hermandapp.forms import *
 from hermandapp.models import *
+import random
 
 
 def es_admin(user):
@@ -191,7 +195,7 @@ def listar_papeletas(request):
 
 
 def junta_gobierno(request):
-    junta_gobierno = JuntaGobierno.objects.all()
+    junta_gobierno = JuntaGobierno.objects.last()
 
     return render(request, 'junta_gobierno.html', {
         'junta': junta_gobierno
@@ -353,19 +357,104 @@ def quitar_de_carrito(request, id):
 
 def comprar(request):
     nuevo_pedido = Pedido()
-    nuevo_pedido.codigo = 'CP0001'
+    nuevo_pedido.codigo = 'CP' + str(Pedido.objects.last().id + 1)
     nuevo_pedido.fecha = datetime.now()
-    nuevo_pedido.hermano = request.user
+    nuevo_pedido.hermano = get_object_or_404(Hermano, usuario=request.user)
+    nuevo_pedido.save()  # GUARDAR ANTES DE USARLO EN LineaPedido
 
     carrito_session = request.session.get('carrito', {})
 
     for k, v in carrito_session.items():
-        linea_pedido = LineaPedido()
         producto = Producto.objects.get(id=k)
+        linea_pedido = LineaPedido()
         linea_pedido.producto = producto
         linea_pedido.precio = producto.precio
         linea_pedido.cantidad = v
         linea_pedido.pedido = nuevo_pedido
         linea_pedido.save()
 
-    nuevo_pedido.save()
+    request.session['carrito'] = {}
+    return redirect('ver_carrito')
+
+
+@login_required()
+def mis_pedidos(request):
+    pedidos_a_mostrar = []
+    total_gastado = 0.0
+
+    hermano_logueado = Hermano.objects.filter(usuario=request.user)
+
+    if len(hermano_logueado) == 1:
+        pedidos_a_mostrar = Pedido.objects.filter(hermano=hermano_logueado[0])
+
+        for p in pedidos_a_mostrar:
+            total_gastado += p.total
+
+    total_pedidos = len(pedidos_a_mostrar)
+
+    return render(request,
+                  'mis_pedidos.html',
+                  {
+                      'pedidos': pedidos_a_mostrar,
+                      'total_pedidos': total_pedidos,
+                      'total_gastado': total_gastado
+                  })
+
+
+
+def nueva_junta(request):
+    # Simulación de una junta "temporal"
+    junta = {
+        'fecha_inicio': timezone.now().date(),
+        'fecha_fin': None,  # opcional si quieres mostrarlo
+    }
+
+    # Inicializar la sesión
+    if 'junta_temp' not in request.session:
+        request.session['junta_temp'] = []
+
+    formulario_miembro = MiembroJuntaFormulario()
+
+    if request.method == 'POST':
+        nuevo_miembro = MiembroJuntaFormulario(request.POST)
+        if nuevo_miembro.is_valid():
+            data = nuevo_miembro.cleaned_data
+            request.session['junta_temp'].append({
+                'hermano_id': data['hermano'].id,
+                'cargo': data['cargo']
+            })
+            request.session.modified = True
+            return redirect('nueva_junta')  # para cerrar modal y evitar reenvío
+
+    # conformar la lista de miembros
+    miembros = []
+    for item in request.session.get('junta_temp', []):
+        hermano = Hermano.objects.get(id=item['hermano_id'])
+        miembros.append({
+            'hermano': hermano,
+            'cargo': item['cargo']
+        })
+
+    context = {
+        'junta': junta,
+        'formulario': formulario_miembro,
+        'user': request.user,
+        'junta_miembros': miembros  # no usamos junta.miembros.all, sino esto
+    }
+
+    return render(request, 'conformacion_junta_gobierno.html', context)
+
+
+def guardar_junta(request):
+    if request.method == 'POST':
+        junta = JuntaGobierno.objects.create()
+
+        for miembro in request.session.get('junta_temp', []):
+            MiembroJunta.objects.create(
+                junta_gobierno=junta,
+                hermano_id=miembro['hermano_id'],
+                cargo=miembro['cargo']
+            )
+
+        request.session.pop('junta_temp', None)
+        return redirect('junta_gobierno',)

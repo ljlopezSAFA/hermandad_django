@@ -1,9 +1,83 @@
 {% extends "base.html" %}
+{% load bootstrap_icons %}
 {% load static %}
 
 {% block content %}
-    <h1>Junta de Gobierno</h1>
+    <h1>Junta de Gobierno Actual</h1>
 
-    <div class="leaflet-control-layers-separator"></div>
+    {% include 'separador.html' %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4><b>Mandato</b></h4>
+
+
+            {% if junta %}
+
+
+                <div class="row">
+                    <div class="col-md-6" style="font-size: smaller"><b>Inicio Mandato:</b> {{ junta.fecha_inicio }}
+                    </div>
+                    <div class="col-md-6" style="font-size: smaller"><b>Fin Mandato:</b> {{ junta.fecha_fin }}</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'separador.html' %}
+    <h4><b>Miembros</b></h4>
+    <img class="cubrir-contenedor"
+         src="https://www.amargura.org/wp-content/uploads/2023/07/IMG-20230713-WA0007.jpg"/>
+
+
+    <br>
+    <br>
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            {% if junta %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th style="color: darkred;">Miembro</th>
+                        <th style="color: darkred;">Cargo</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+                    {% for m in junta.miembros.all %}
+                        <tr>
+
+                            <td>{{ m.hermano.nombre_completo }}</td>
+                            <td style="font-style: italic">{{ m.get_cargo_display }}</td>
+
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+
+
+                </table>
+
+
+            {% endif %}
+
+            {% include 'separador.html' %}
+
+            {% if user.rol == 'admin' %}
+                <a href="{% url 'nueva_junta' %}">
+                    <button class="btn-amargura">{% bs_icon 'plus' %} Nueva Junta de Gobierno</button>
+                </a>
+            {% endif %}
+
+        </div>
+
+
 
 {% endblock %}

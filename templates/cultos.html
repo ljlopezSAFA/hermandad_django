@@ -20,19 +20,22 @@
                     </div>
                 </div>
                 {% if forloop.counter|divisibleby:2 and not forloop.last %}
-                    </div><div class="row">
+                    </div>
+                    <div class="row">
                 {% endif %}
             {% empty %}
                 <p>No hay cultos registrados aún.</p>
             {% endfor %}
-        </div>
+            </div>
     </div>
 
     <br>
 
-    <a href="{% url 'crear_culto' %}">
-        <button type="button" class="btn-amargura">
-            Crear nuevo Culto
-        </button>
-    </a>
+    {% if user.rol == 'admin' %}
+        <a href="{% url 'crear_culto' %}">
+            <button type="button" class="btn-amargura">
+                Crear nuevo Culto
+            </button>
+        </a>
+    {% endif %}
 {% endblock %}

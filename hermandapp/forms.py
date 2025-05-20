@@ -155,3 +155,21 @@ class LoginFormulario(AuthenticationForm):
             'placeholder': 'Contraseña',
             'id': 'password'
         })
+
+
+class MiembroJuntaFormulario(forms.ModelForm):
+    class Meta:
+        model = MiembroJunta
+        fields = ['hermano', 'cargo', ]
+        widgets = {
+            'hermano': forms.Select(attrs={
+                'class': 'form-select',
+                'placeholder': '----',
+                'id': 'hermano'
+            }),
+            'cargo': forms.Select(attrs={
+                'class': 'form-select',
+                'placeholder': '----',
+                'id': 'cargo'
+            })
+        }

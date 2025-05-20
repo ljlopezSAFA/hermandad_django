@@ -38,6 +38,7 @@ class CargoHermandad(models.TextChoices):
     DIPUTADO_CARIDAD = 'DIPUTADO_CARIDAD', 'Diputado de Caridad'
     DIPUTADO_FORMACION = 'DIPUTADO_FORMACION', 'Diputado de Formación'
     DIPUTADO_MAYOR_GOBIERNO = 'DIPUTADO_MAYOR_GOBIERNO', 'Diputado Mayor de Gobierno'
+    MIEMBRO = 'MIEMBRO', 'Miembro de la junta'
 
 
 # Create your models here.
@@ -60,6 +61,11 @@ class Hermano(models.Model):
     mail = models.EmailField()
     fecha_nacimiento = models.DateTimeField()
     telefono = models.CharField(max_length=15, null=True)
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, null=True)
+
+    @property
+    def nombre_completo(self):
+        return self.apellidos +  " , " + self.nombre
 
     def __str__(self):
         return self.apellidos +  " , " + self.nombre
@@ -134,7 +140,8 @@ class JuntaGobierno(models.Model):
 
 class MiembroJunta(models.Model):
     junta_gobierno = models.ForeignKey('JuntaGobierno', on_delete=models.CASCADE, related_name='miembros')
-    cargo = models.CharField(max_length=80, choices=CargoHermandad.choices)
+    hermano = models.ForeignKey('Hermano', on_delete= models.DO_NOTHING, null=True)
+    cargo = models.CharField(max_length=80, choices=CargoHermandad.choices, default=CargoHermandad.MIEMBRO)
 
     def __str__(self):
         return self.junta_gobierno.id + self.cargo.lower()
@@ -209,6 +216,14 @@ class Pedido(models.Model):
         related_name= 'pedidos'  # nombre para acceder desde el lado de Hermano
     )
 
+    @property
+    def total(self):
+        total = 0.0
+        for l in self.linea_pedidos.all():
+            total+= l.precio * l.cantidad
+
+        return total
+
 
     def __str__(self):
         return self.codigo
@@ -217,10 +232,14 @@ class Pedido(models.Model):
 
 
 class LineaPedido(models.Model):
-    pedido = models.ForeignKey(Pedido, on_delete= models.CASCADE)
+    pedido = models.ForeignKey(Pedido, on_delete= models.CASCADE, related_name='linea_pedidos')
     producto = models.ForeignKey(Producto, on_delete= models.DO_NOTHING)
     cantidad = models.IntegerField()
     precio = models.FloatField()
+
+    @property
+    def subtotal(self):
+        return self.precio * self.cantidad
 
     def __str__(self):
         return self.producto.nombre + "-" + self.precio

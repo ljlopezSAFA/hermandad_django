@@ -5,15 +5,19 @@
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <!-- Logo alineado a la izquierda -->
+
             <div class="d-flex align-items-center">
-                <img src="{% static 'images/Hermandad_Amargura_Escudo.png' %}" alt="Logo" width="60" height="60">
+                <a class="nav-link special-text" aria-current="page" href="{% url 'home_page' %}">
+                    <img src="{% static 'images/Hermandad_Amargura_Escudo.png' %}" alt="Logo" width="60" height="60">
+                </a>
             </div>
+
 
             <!-- Título centrado -->
             <div class="flex-grow-1 text-center">
-            <span class="main-title">
-                Hermandad de La Amargura
-            </span>
+                <a class="nav-link special-text" aria-current="page" href="{% url 'home_page' %}">
+                    <span class="main-title">   Hermandad de La Amargura </span>
+                </a>
             </div>
 
             <!-- Espaciador para equilibrar la distribución -->
@@ -38,57 +42,74 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link special-text" aria-current="page" href="{% url 'home_page' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'titulares' %}">Titulares</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'templo' %}">Templo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'junta_gobierno' %}">Junta de Gobierno</a>
-                    </li>
-                    {% if user.rol == 'admin' %}
-                        <li class="nav-item">
-                            <a class="nav-link special-text" href="{% url 'hermanos' %}">Hermanos</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'cultos' %}">Cultos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'composiciones' %}">Composiciones Musicales</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'tienda' %}">Tienda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'ver_carrito' %}">Carrito</a>
-                    </li>
-                    {% if user.rol == 'admin' %}
-                        <li class="nav-item">
-                            <a class="nav-link special-text" href="{% url 'papeletas' %}">Gestión de Papeletas de
-                                Sitio</a>
-                        </li>
-                    {% endif %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle special-text"
                            href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            Otras Secciones
+                            <i class="fas fa-church"></i> La Hermandad
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item special-text" href="">Galería</a></li>
-                            <li><a class="dropdown-item special-text" href="#">Noticias</a></li>
-                            <li><a class="dropdown-item special-text" href="#">Contacto</a></li>
+                            <li><a class="dropdown-item special-text" href="{% url 'titulares' %}">Titulares</a></li>
+                            <li><a class="dropdown-item special-text" href="{% url 'templo' %}">Templo</a></li>
+                            <li><a class="dropdown-item special-text" href="{% url 'junta_gobierno' %}">Junta de
+                                Gobierno</a>
+                            </li>
+                            <li><a class="dropdown-item special-text" href="{% url 'cultos' %}">Cultos</a>
+                            </li>
+                            <li><a class="dropdown-item special-text" href="{% url 'composiciones' %}">Composiciones
+                                Musicales</a>
+                            </li>
                         </ul>
                     </li>
+
+                    {% if user.rol == 'admin' %}
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle special-text"
+                                   href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    {% bs_icon 'gear' %} Administrar
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item special-text" href="{% url 'hermanos' %}">Hermanos</a>
+                                    </li>
+                                    <li><a class="dropdown-item special-text" href="{% url 'papeletas' %}">Gestión de
+                                        Papeletas de Sitio</a>
+                                    </li>
+                                    <li><a class="dropdown-item special-text" href="{% url 'titulares' %}">Titulares</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endif %}
+
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle special-text"
+                               href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                {% bs_icon 'person' %} Área Personal
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li><a class="dropdown-item special-text"
+                                       href="{% url 'mis_pedidos' %}">Mis Pedidos</a></li>
+                                <li><a class="dropdown-item special-text"
+                                       href="{% url 'logout' %}">{% bs_icon 'box-arrow-left' %}Logout</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
                     <li class="nav-item">
-                        <a class="nav-link special-text" href="{% url 'logout' %}">{% bs_icon 'box-arrow-left' %}
-                            Logout</a>
+                        <a class="nav-link special-text" href="{% url 'tienda' %}">
+                            {% bs_icon 'bag' %}Tienda</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link special-text" href="{% url 'ver_carrito' %}">
+                             {% bs_icon 'cart' %}Carrito</a>
+                    </li>
+
+
                 </ul>
             </div>
         </div>

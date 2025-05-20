@@ -51,10 +51,10 @@
 
     <br>
 
-    {% if user.is_authenticated %}
-        <a href="{% url 'crear_papeleta' %}">
-            <button class="btn-amargura">Nueva Papeleta de Sitio</button>
-        </a>
+    {% if user.rol == 'admin' %}
+            <a href="{% url 'crear_papeleta' %}">
+                <button class="btn-amargura">Nueva Papeleta de Sitio</button>
+            </a>
     {% endif %}
 
     <style>

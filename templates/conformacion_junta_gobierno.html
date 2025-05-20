@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load bootstrap_icons %}
+{% load static %}
+
+{% block content %}
+    <h1>Conformación de la nueva Junta de Gobierno</h1>
+
+
+    {% include 'separador.html' %}
+
+    <div class="row">
+        <div class="col-md-6">Inicio Mandato: {{ junta.fecha_inicio }}</div>
+        <div class="col-md-6">Fin Mandato:{{ junta.fecha_inicio }}</div>
+    </div>
+
+    {% include 'separador.html' %}
+    <div class="row centrar">
+        {% if user.rol == 'admin' %}
+            <div class="col-md-4">
+                <button class="btn-amargura" data-bs-toggle="modal" data-bs-target="#miModal">
+                    Nuevo Miembro
+                </button>
+            </div>
+
+        {% endif %}
+    </div>
+
+    {% include 'separador.html' %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="color: darkred;">Miembro</th>
+            <th style="color: darkred;">Cargo</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        {% for m in junta_miembros %}
+
+
+            <tr>
+
+                <td>{{ m.hermano.nombre_completo }}</td>
+                <td style="font-style: italic">{{ m.cargo }}</td>
+
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+    {% include 'separador.html' %}
+
+    <div class="row centrar">
+        {% if user.rol == 'admin' %}
+            <form method="post" action="{% url 'guardar_junta' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-amargura">{% bs_icon 'plus' %} Confirmar Creación Junta</button>
+            </form>
+        {% endif %}
+    </div>
+
+
+
+    <div class="modal fade" id="miModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mi Modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="form-floating mb-3">
+                            {{ formulario.hermano }}
+                            <label for="inputnombre">{% bs_icon 'person' %} Hermano</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            {{ formulario.cargo }}
+                            <label for="inputapellidos">{% bs_icon 'person-circle' %} Cargo</label>
+                        </div>
+
+                        <button type="submit" class="btn-amargura">
+                            Guardar
+                        </button>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
