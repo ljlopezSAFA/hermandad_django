@@ -36,5 +36,7 @@ urlpatterns = [
     path('guardar_junta/', guardar_junta, name='guardar_junta'),
     path('login/', loguearse, name='login'),
     path('logout/', logout_usuario, name='logout'),
+    path("404/", error_404),
+
 
 ]

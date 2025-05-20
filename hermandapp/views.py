@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.backends import django
 from django.template.defaultfilters import random
 
 from hermandapp.forms import *

@@ -93,8 +93,6 @@
                             <ul class="dropdown-menu dropdown-menu-dark">
                                 <li><a class="dropdown-item special-text"
                                        href="{% url 'mis_pedidos' %}">Mis Pedidos</a></li>
-                                <li><a class="dropdown-item special-text"
-                                       href="{% url 'logout' %}">{% bs_icon 'box-arrow-left' %}Logout</a></li>
 
                             </ul>
                         </li>
@@ -106,9 +104,13 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link special-text" href="{% url 'ver_carrito' %}">
-                             {% bs_icon 'cart' %}Carrito</a>
+                            {% bs_icon 'cart' %}Carrito</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link special-text" href="{% url 'logout' %}">
+                            {% bs_icon 'box-arrow-left' %}Logout</a>
+                    </li>
 
                 </ul>
             </div>
